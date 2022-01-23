@@ -1,0 +1,245 @@
+
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeLeaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="...">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <title>BookRent</title>
+  </head>
+  <body>
+<script type="text/javascript" src="script/LOSU.js"></script>
+    <header>
+
+      <nav id ='imthenav'>
+          <ul class="esp">
+
+            <li class="ls" onclick = "turnAll('block')"><a href="#">Home</a></li>
+            <li class="ls" onclick = "Section('Library')"><a href="#">Library</a></li>
+            <li class="ls" onclick = "Section('Contact')"><a href="#">Contact</a></li>
+
+          </ul>
+
+		<div th:if="${UsrName}">
+		 <form th:action="@{/Home}" method="get" >
+		<button class="loggin" type="submit">Logout</button>
+        </form>
+          <div th:switch="${info_user.getUserName()=='popin'}">
+          <button th:case="true" onclick="Add_Book()" class="acc">Add Book</button>
+          <button th:case="false" class="acc">My Account</button>
+
+          </div>
+		</div>
+		<div th:unless="${UsrName}">
+		
+		   <button onclick="Signup1()" class="loggin">Sign Up</button>
+          <button onclick="Login1()" class="log">Login</button>
+		</div>
+
+
+            <div id="id01" class="modal">
+              <div class="modal-content animate">
+                <div class="container">
+                  <div id="id02" class="signnup">
+                    <form th:action="@{/UserRegister}" method="post" >
+                      <input type="text" placeholder="Nom" name="Name">
+                      <input type="text" placeholder="Prénom"  name="Last_Name">
+                      <input type="text" placeholder="User Name"  name="UsrName">
+                      <input type="text" placeholder="E-mail"  name="mail">
+                      <input type="password" placeholder="Password"  name="pwd">
+                        <button type="submit" class="br">Sign Up</button>
+
+                    </form>
+                </div>
+                <div id="id020" class="signnup">
+                    <form th:action="@{/UserAddress}" method="post" >
+                      <input type="text" placeholder="Adresse" name="Adresse">
+                      <input type="text" placeholder="Code postal" name="Code_Postal">
+                      <input type="text" placeholder="Num Tel"  name="Tel">
+                      <div th:if="${info_user}">
+                      <input type="hidden" name="usr" th:value="${info_user}">
+                      <input type="hidden" name="id" th:value="${info_user.getId()}">
+                  
+                      </div>
+                      <button type="submit">Save</button>
+
+                    </form>
+                </div>
+                <div id="id030" class="signnup">
+                    <form th:action="@{/BookSuperUser}" method="post" >
+                        <label>Super User - Add Book</labe>
+                      <input type="text" placeholder="BookName" name="BookName">
+                      <input type="text" placeholder="Author" name="Author">
+                      <input type="text" placeholder="Prix"  name="Prix">
+                		 <div th:if="${info_user}">
+                      <input type="hidden" name="usr" th:value="${info_user}">
+                      </div>
+                      <button type="submit">Save</button>
+
+                    </form>
+                </div>
+                
+
+                <form th:action="@{/Login}" method="get">
+                  <input type="text" placeholder="E-mail \ Username..." name="uid" id="euL" required>
+                  <input type="password" placeholder="Password" name="pwd" id="id09" required>
+                  <div id="id04">
+
+                  <button type="submit">Login</button>
+
+                  <strong><center style="margin-top:10px;" ><a href="#" onclick="Signup()" class="Signup">Sign Up</a></center></strong>
+                  <p class="erreurmes">
+
+              </p>
+
+                  </div>
+                    
+                  <div id="id03" class="signnup">
+
+                      <strong><center style="margin-top:10px;" ><a href="#" onclick="Login()" class="Signup">Login</a></strong></center>
+                  <p  class="erreurmes">
+                  </p>
+                  </div>
+
+                </form>
+                </div>
+
+                <div class="container" style="background-color:#f1f1f1; border-radius:10px;">
+                  <button type="button" onclick="Cancel()" class="cancelbtn">Cancel</button>
+
+                </div>
+            </div>
+</div>
+</nav>
+  
+</header>
+
+
+
+<body onload="Test()">
+ 
+ <section id='Home'>
+  <div class="container1">
+  <img src="lib2.jpg">
+  <div th:if="${UsrName}">
+  <button class="btn" onclick = "Section('Library')"><b>Rent Your Book Now</b></button>
+  </div>
+  <div th:unless="${UsrName}">
+   <button class="btn" onclick="Login1()"><b>Rent Your Book Now</b></button>
+  </div>
+  
+</div>
+ 
+ </section>
+ 
+<section class="contact" id='Contact'>
+<br><br><br><br><br><br>
+
+         <center><p style="color: black; font-size: 28px"><strong>Tel:</strong> +212 661 57 70 94</p>
+        <br>
+         <p style="color: black; font-size: 28px;"><strong>E-mail:</strong>    Library@library.ma</p></center>
+<br>
+         <form class="contact-form" action="includes/contact.inc.php" method="post">
+           <input type="text" name="name" placeholder="Enter Your Username"><br>
+           <input type="text" name="mail" placeholder="Enter Your E-Mail"><br>
+           <input type="text" name="subject" placeholder="Objet">
+           <br>
+           <textarea name="message" placeholder="Message ..." class="textarea"></textarea>
+           <br>
+   
+           <center><button class="site-btn sb-dark" type="submit" name="submit">Send</button></center>
+         </form>
+<br><br><br>
+ </section>
+ 
+ <section id="Library">
+ <br><br><br><br>
+ <br><br>  <br>   
+ <form th:action="@{/Books}" method="get">
+ <div th:if="${info_user}">
+ <input type="hidden" name="usr" th:value="${info_user}">
+ <input type="hidden" name="id" th:value="${info_user.getId()}">
+ </div>
+ <div class="tableFixHead">
+      <table>
+        <thead id="thead">
+          <tr>
+          	<th></th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+   
+        <tbody th:each="book : ${Books}">
+          <tr th:if="${book.isDisponibility()}">
+			<td><input type="checkbox" name="myParam[]"
+            th:value="${book.getid()}"/>&nbsp;</td>
+            <td th:utext="${book.getBookName()}"></td>
+            <td th:utext="${book.getAuthor()}"></td>
+            <td th:utext="${book.getPrix()}"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <center><p style="color: black; font-size: 23px;" th:text="${Rent}"></p></center>
+     
+    <div th:if="${info_user}">
+    <div th:switch="${bool_add != null}">
+     <button th:case="true" type="submit" class = "Submit">Rent</button>
+     <button th:case="false" onclick="Add_Adress()" type="button" class="Submit">Rent</button>
+     </div>
+     </div>
+     <div th:unless="${info_user}">
+     <button type="button" onclick="Login1()" class="Submit">Rent</button>
+     </div>
+     
+    
+ </section>
+</body>
+
+ <script>
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
+
+
+function turnAll(on_off) {
+	  document.getElementById('Contact').style.display = on_off;
+	  document.getElementById('Home').style.display = on_off;
+	  document.getElementById('Library').style.display = on_off;
+}
+
+
+function Section(ID) {
+	  turnAll("none");
+	  document.getElementById(ID).style.display = "block";
+}
+
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+    document.getElementById("imthenav").style.zIndex = "1";
+    document.getElementById("Library").style.display = "none";
+  } else {
+    document.getElementById("imthenav").style.zIndex = "";
+  }
+}
+
+function Test(){
+	if (window.location.href.indexOf("UsrName") > -1) {
+		Section('Library');
+	    }
+}
+
+</script>
